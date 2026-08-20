@@ -1,0 +1,37 @@
+.wwcs-qty-wrap {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.wwcs-qty-wrap .qty {
+	width: 44px;
+	text-align: center;
+	border: none;
+	box-shadow: none;
+	-moz-appearance: textfield;
+}
+
+.wwcs-qty-wrap .qty::-webkit-outer-spin-button,
+.wwcs-qty-wrap .qty::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.wwcs-qty-btn {
+	background: #f6f6f6;
+	border: none;
+	width: 32px;
+	height: 38px;
+	line-height: 38px;
+	font-size: 16px;
+	cursor: pointer;
+	color: #333;
+	padding: 0;
+}
+
+.wwcs-qty-btn:hover {
+	background: #ececec;
+}

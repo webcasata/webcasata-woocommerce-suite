@@ -1,0 +1,13 @@
+.wwcs-color-swatches {
+	display: flex;
+	gap: 6px;
+	margin-top: 8px;
+}
+
+.wwcs-color-dot {
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	display: inline-block;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+}
