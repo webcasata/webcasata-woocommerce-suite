@@ -46,7 +46,9 @@ class WWCS_Admin_Page {
 			$posted = array_map( 'sanitize_text_field', wp_unslash( $_POST['wwcs'] ) );
 		}
 
-		WWCS_Settings::save( $posted );
+		$submitted_tab = isset( $_POST['wwcs_current_tab'] ) ? sanitize_key( wp_unslash( $_POST['wwcs_current_tab'] ) ) : null;
+
+		WWCS_Settings::save( $posted, $submitted_tab );
 		WWCS_Settings::save_delete_on_uninstall( ! empty( $_POST['wwcs_delete_on_uninstall'] ) );
 
 		add_action( 'admin_notices', array( __CLASS__, 'saved_notice' ) );
@@ -82,6 +84,7 @@ class WWCS_Admin_Page {
 
 			<form method="post">
 				<?php wp_nonce_field( 'wwcs_save_settings', 'wwcs_nonce' ); ?>
+				<input type="hidden" name="wwcs_current_tab" value="<?php echo esc_attr( $current_tab ); ?>" />
 
 				<div class="wwcs-features">
 					<?php foreach ( $tabs[ $current_tab ]['features'] as $key => $feature ) :
@@ -105,6 +108,27 @@ class WWCS_Admin_Page {
 									<span class="wwcs-badge-soon"><?php esc_html_e( 'Coming soon', 'webcasata-woocommerce-suite' ); ?></span>
 								<?php endif; ?>
 								<p><?php echo esc_html( $feature['description'] ); ?></p>
+
+								<?php if ( ! empty( $feature['fields'] ) ) : ?>
+									<div class="wwcs-feature-fields<?php echo $enabled ? '' : ' wwcs-fields-disabled'; ?>">
+										<?php foreach ( $feature['fields'] as $field_key => $field ) :
+											$field_value = WWCS_Settings::get_field_value( $field_key, isset( $field['default'] ) ? $field['default'] : '' );
+											$input_type  = 'number' === $field['type'] ? 'number' : 'text';
+											?>
+											<label class="wwcs-field-label">
+												<?php echo esc_html( $field['label'] ); ?>
+												<input
+													type="<?php echo esc_attr( $input_type ); ?>"
+													name="wwcs[<?php echo esc_attr( $field_key ); ?>]"
+													value="<?php echo esc_attr( $field_value ); ?>"
+													class="wwcs-field-input"
+													<?php echo 'number' === $field['type'] ? 'min="0" step="1"' : ''; ?>
+													<?php disabled( ! $enabled ); ?>
+												/>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								<?php endif; ?>
 							</div>
 						</div>
 					<?php endforeach; ?>

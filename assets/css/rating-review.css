@@ -1,0 +1,16 @@
+.wwcs-rating-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: #666;
+	margin: 4px 0;
+}
+
+.wwcs-rating-row .star-rating {
+	font-size: 13px;
+}
+
+.wwcs-review-count {
+	color: #888;
+}

@@ -110,3 +110,27 @@
 	color: #666;
 	font-size: 12px;
 }
+
+.wwcs-feature-fields {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px dashed #e2e2e2;
+	transition: opacity 0.2s;
+}
+
+.wwcs-feature-fields.wwcs-fields-disabled {
+	opacity: 0.45;
+}
+
+.wwcs-field-label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	color: #333;
+}
+
+.wwcs-field-input {
+	width: 80px;
+	padding: 4px 6px;
+}

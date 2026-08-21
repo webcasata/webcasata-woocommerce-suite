@@ -32,6 +32,30 @@ class WWCS_Loader {
 			'file'  => 'modules/class-module-color-swatch-card.php',
 			'class' => 'WWCS_Module_Color_Swatch_Card',
 		),
+		'hover_image_swap' => array(
+			'file'  => 'modules/class-module-hover-image-swap.php',
+			'class' => 'WWCS_Module_Hover_Image_Swap',
+		),
+		'auto_new_badge' => array(
+			'file'  => 'modules/class-module-new-badge.php',
+			'class' => 'WWCS_Module_New_Badge',
+		),
+		'you_save_label' => array(
+			'file'  => 'modules/class-module-you-save.php',
+			'class' => 'WWCS_Module_You_Save',
+		),
+		'rating_review_count' => array(
+			'file'  => 'modules/class-module-rating-review.php',
+			'class' => 'WWCS_Module_Rating_Review',
+		),
+		'oos_ribbon' => array(
+			'file'  => 'modules/class-module-oos-ribbon.php',
+			'class' => 'WWCS_Module_OOS_Ribbon',
+		),
+		'emi_price_hint' => array(
+			'file'  => 'modules/class-module-emi-hint.php',
+			'class' => 'WWCS_Module_EMI_Hint',
+		),
 	);
 
 	public static function init() {

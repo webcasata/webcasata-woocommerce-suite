@@ -58,6 +58,44 @@ class WWCS_Settings {
 						'label'       => __( 'Color Attribute on Product Card', 'webcasata-woocommerce-suite' ),
 						'description' => __( 'Shows small color swatches on shop/archive product cards for variable products that have a color attribute.', 'webcasata-woocommerce-suite' ),
 					),
+					'hover_image_swap' => array(
+						'label'       => __( 'Hover Image Swap', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'Swaps to the product\'s second gallery image when a shopper hovers over its card.', 'webcasata-woocommerce-suite' ),
+					),
+					'auto_new_badge' => array(
+						'label'       => __( 'Auto "New" Badge', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'Shows a NEW badge on products published within a set number of days — no manual tagging needed.', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'new_badge_days' => array(
+								'type'    => 'number',
+								'label'   => __( 'Show for products newer than (days)', 'webcasata-woocommerce-suite' ),
+								'default' => 30,
+							),
+						),
+					),
+					'you_save_label' => array(
+						'label'       => __( '"You Save" Label', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'Shows the exact amount saved (e.g. "You save $10") on sale product cards, alongside the discount badge.', 'webcasata-woocommerce-suite' ),
+					),
+					'rating_review_count' => array(
+						'label'       => __( 'Star Rating + Review Count', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'Shows star rating and review count on product cards, consistently, regardless of theme.', 'webcasata-woocommerce-suite' ),
+					),
+					'oos_ribbon' => array(
+						'label'       => __( 'Out of Stock Ribbon', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'Shows a clear "Out of Stock" ribbon and dims the image for out-of-stock products.', 'webcasata-woocommerce-suite' ),
+					),
+					'emi_price_hint' => array(
+						'label'       => __( 'Installment / EMI Price Hint', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'Shows an "or $X × N" instalment hint under the price, to make higher-ticket items feel more affordable.', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'emi_installments' => array(
+								'type'    => 'number',
+								'label'   => __( 'Number of installments', 'webcasata-woocommerce-suite' ),
+								'default' => 3,
+							),
+						),
+					),
 				),
 			),
 
@@ -108,24 +146,67 @@ class WWCS_Settings {
 	}
 
 	/**
-	 * Save posted toggle values. Only saves keys that actually exist in the
-	 * registry and are not marked "coming soon", so nothing bogus gets stored.
+	 * Save posted toggle values (and any per-feature config fields) for ONE
+	 * tab at a time.
 	 *
-	 * @param array $posted Flat array of feature_key => 1 (only checked boxes are present in $_POST).
+	 * A given form only ever renders the checkboxes/fields for the tab
+	 * currently being viewed, so $posted only ever contains that tab's keys
+	 * (an unchecked box, or a field disabled by JS because its toggle is
+	 * off, simply isn't present in $_POST — same as a box on a different
+	 * tab that was never rendered). Because of that, we start from the
+	 * existing saved settings and only recompute the keys that belong to
+	 * $tab_key — every other tab's values, and any field that wasn't
+	 * actually submitted, are left untouched. Without this, saving Tab B
+	 * would look indistinguishable from "everything on every other tab was
+	 * just unchecked/cleared" and wipe it.
+	 *
+	 * @param array       $posted  Flat array of key => value from $_POST for the submitted tab.
+	 * @param string|null $tab_key The tab that was actually submitted. If missing/invalid, nothing is changed.
 	 */
-	public static function save( $posted ) {
-		$clean = array();
+	public static function save( $posted, $tab_key = null ) {
+		if ( ! $tab_key || ! isset( self::$registry[ $tab_key ] ) ) {
+			return; // Unknown tab — don't touch any saved settings.
+		}
 
-		foreach ( self::$registry as $tab ) {
-			foreach ( $tab['features'] as $key => $feature ) {
-				if ( ! empty( $feature['coming_soon'] ) ) {
-					continue;
+		$clean = self::get_all();
+
+		foreach ( self::$registry[ $tab_key ]['features'] as $key => $feature ) {
+			if ( ! empty( $feature['coming_soon'] ) ) {
+				continue;
+			}
+
+			$clean[ $key ] = isset( $posted[ $key ] ) ? 1 : 0;
+
+			if ( empty( $feature['fields'] ) ) {
+				continue;
+			}
+
+			foreach ( $feature['fields'] as $field_key => $field ) {
+				if ( isset( $posted[ $field_key ] ) && '' !== $posted[ $field_key ] ) {
+					$clean[ $field_key ] = self::sanitize_field_value( $posted[ $field_key ], $field );
+				} elseif ( ! isset( $clean[ $field_key ] ) ) {
+					// First time this field has ever been saved — seed it with its default.
+					$clean[ $field_key ] = isset( $field['default'] ) ? $field['default'] : '';
 				}
-				$clean[ $key ] = isset( $posted[ $key ] ) ? 1 : 0;
+				// Otherwise: field wasn't submitted this time — keep whatever was already saved.
 			}
 		}
 
 		update_option( self::OPTION_KEY, $clean );
+	}
+
+	private static function sanitize_field_value( $raw, $field ) {
+		$type = isset( $field['type'] ) ? $field['type'] : 'text';
+		return 'number' === $type ? absint( $raw ) : sanitize_text_field( $raw );
+	}
+
+	/**
+	 * Fetch a saved config field's value (e.g. new_badge_days), falling back
+	 * to the given default when nothing has been saved yet.
+	 */
+	public static function get_field_value( $key, $default = '' ) {
+		$saved = self::get_all();
+		return isset( $saved[ $key ] ) && '' !== $saved[ $key ] ? $saved[ $key ] : $default;
 	}
 
 	/**

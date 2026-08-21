@@ -6,7 +6,7 @@ Tested up to: 6.6
 Requires PHP: 7.4
 Requires Plugins: woocommerce
 WC requires at least: 8.0
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 
 A lightweight, modular WooCommerce enhancement toolkit. Turn on only the features you need — everything else stays completely inactive.
@@ -15,7 +15,7 @@ A lightweight, modular WooCommerce enhancement toolkit. Turn on only the feature
 
 Webcasata WooCommerce Suite replaces several single-purpose WooCommerce plugins with one lightweight toolkit. Every feature is a self-contained module with its own toggle in WooCommerce > Webcasata Suite. If a toggle is off, its PHP, CSS, and JS are never loaded — so enabling 2 of 20 modules costs you the weight of 2 modules, not 20.
 
-= Included in v1.0.0 =
+= Included in v1.1.0 =
 
 **General**
 * Sticky Add to Cart
@@ -23,9 +23,17 @@ Webcasata WooCommerce Suite replaces several single-purpose WooCommerce plugins 
 **Product Card**
 * Percentage Discount Badge
 * Color Attribute Swatches (archive/shop cards)
+* Hover Image Swap (second gallery image on hover)
+* Auto "New" Badge (configurable day threshold)
+* "You Save" Label
+* Star Rating + Review Count
+* Out of Stock Ribbon
+* Installment / EMI Price Hint (configurable installment count)
 
 **Plus / Minus**
 * Plus / Minus Quantity Buttons (product, cart, checkout)
+
+Two Product Card modules (Auto "New" Badge, Installment/EMI Price Hint) have a small config field next to their toggle — e.g. how many days count as "new". Fields are greyed out and disabled via JS while their feature is off, and the backend only ever overwrites a field's saved value when it's actually submitted, so toggling a feature off and back on never resets your configured number back to the default.
 
 Modules marked "Coming soon" in the admin screen are wired into the settings UI and toggle-ready, so they can be built out and dropped in without touching the settings or admin UI code.
 
@@ -37,14 +45,22 @@ Modules marked "Coming soon" in the admin screen are wired into the settings UI 
 
 == Developer notes: adding a new module ==
 
-1. Add the feature's label/description to the relevant tab in `includes/class-wwcs-settings.php` (`WWCS_Settings::build_registry()`).
+1. Add the feature's label/description to the relevant tab in `includes/class-wwcs-settings.php` (`WWCS_Settings::build_registry()`). If it needs a small config value alongside its toggle (a number or short text, e.g. a day threshold), add a `fields` sub-array — see `auto_new_badge` or `emi_price_hint` for the pattern. The admin UI, saving, and defaulting are all handled generically from this one array; no other admin code needs to change.
 2. Add a `feature_key => [ 'file', 'class' ]` entry to `WWCS_Loader::$module_map` in `includes/class-wwcs-loader.php`.
-3. Create `includes/modules/class-module-your-feature.php` with a class that has a static `init()` method — that's the only method the loader calls, so hook everything from there.
+3. Create `includes/modules/class-module-your-feature.php` with a class that has a static `init()` method — that's the only method the loader calls, so hook everything from there. Read a config field's saved value with `WWCS_Settings::get_field_value( 'field_key', $default )`.
 4. Enqueue any CSS/JS from inside your module's own `init()`, conditioned on the relevant page (`is_product()`, `is_shop()`, etc.) — never enqueue globally.
 
 The module only loads at all if its toggle is on, so there's no need to check the setting again inside the module itself.
 
 == Changelog ==
+
+= 1.1.0 =
+* Added 6 new Product Card modules: Hover Image Swap, Auto "New" Badge, "You Save" Label, Star Rating + Review Count, Out of Stock Ribbon, Installment/EMI Price Hint.
+* Extended the settings framework to support small per-feature config fields (number/text) alongside a toggle, with generic admin rendering, saving, and defaulting.
+* Star Rating + Review Count module removes WooCommerce's default loop rating hook before adding its own, to avoid a duplicate rating showing on the card.
+
+= 1.0.2 =
+* Fixed a bug where saving one tab's toggles (e.g. Product Card) reset every other tab's toggles (e.g. General) back to off. Each tab's form now only recomputes that tab's own settings and leaves all other tabs untouched.
 
 = 1.0.1 =
 * Added `Requires Plugins: woocommerce` header — WordPress 6.5+ now natively blocks activation without WooCommerce and locks WooCommerce against deactivation while this plugin is active, matching the standard WooCommerce-extension dependency UI.
