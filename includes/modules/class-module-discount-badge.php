@@ -15,6 +15,20 @@ class WWCS_Module_Discount_Badge {
 			return;
 		}
 		wp_enqueue_style( 'wwcs-discount-badge', WWCS_URL . 'assets/css/discount-badge.css', array(), WWCS_VERSION );
+
+		wp_add_inline_style(
+			'wwcs-discount-badge',
+			WWCS_Settings::build_badge_css(
+				'.wwcs-discount-badge',
+				'discount_badge',
+				array(
+					'bg_color'      => '#e63946',
+					'text_color'    => '#ffffff',
+					'border_radius' => 4,
+					'font_size'     => 12,
+				)
+			)
+		);
 	}
 
 	public static function render_badge() {

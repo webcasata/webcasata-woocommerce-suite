@@ -6,14 +6,13 @@ ul.products li.product {
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	background: #6c757d;
-	color: #fff;
-	font-size: 11px;
 	font-weight: 600;
 	line-height: 1;
 	padding: 4px 8px;
-	border-radius: 4px;
 	z-index: 2;
+	/* background-color, color, border-radius, and font-size are set via
+	   wp_add_inline_style() from the admin's saved appearance fields —
+	   see WWCS_Module_OOS_Ribbon::enqueue(). */
 }
 
 /* Dim whichever product image(s) come after the ribbon in the DOM —

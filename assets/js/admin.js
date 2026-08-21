@@ -1,19 +1,22 @@
 ( function ( $ ) {
 	'use strict';
 
-	function syncFields( $row ) {
-		var checked = $row.find( '.wwcs-switch input[type="checkbox"]' ).is( ':checked' );
-		$row.find( '.wwcs-feature-fields' ).toggleClass( 'wwcs-fields-disabled', ! checked );
-		$row.find( '.wwcs-feature-fields input' ).prop( 'disabled', ! checked );
-	}
+	// Accordion behavior: each feature's config/appearance panel (if it has
+	// one) lives in the same .wwcs-feature-group as its toggle. The panel's
+	// initial open/closed state is rendered server-side (see
+	// class-wwcs-admin-page.php) to avoid a flash of the wrong state before
+	// JS runs; from here on, JS just animates the transition when the
+	// toggle changes.
+	$( document ).on( 'change', '.wwcs-feature-row .wwcs-switch input[type="checkbox"]', function () {
+		var $panel = $( this ).closest( '.wwcs-feature-group' ).find( '.wwcs-feature-fields' );
+		if ( ! $panel.length ) {
+			return;
+		}
 
-	$( function () {
-		$( '.wwcs-feature-row' ).each( function () {
-			syncFields( $( this ) );
-		} );
-
-		$( document ).on( 'change', '.wwcs-feature-row .wwcs-switch input[type="checkbox"]', function () {
-			syncFields( $( this ).closest( '.wwcs-feature-row' ) );
-		} );
+		if ( $( this ).is( ':checked' ) ) {
+			$panel.slideDown( 200 );
+		} else {
+			$panel.slideUp( 200 );
+		}
 	} );
 } )( jQuery );

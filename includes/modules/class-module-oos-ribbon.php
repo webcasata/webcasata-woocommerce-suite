@@ -19,6 +19,20 @@ class WWCS_Module_OOS_Ribbon {
 			return;
 		}
 		wp_enqueue_style( 'wwcs-oos-ribbon', WWCS_URL . 'assets/css/oos-ribbon.css', array(), WWCS_VERSION );
+
+		wp_add_inline_style(
+			'wwcs-oos-ribbon',
+			WWCS_Settings::build_badge_css(
+				'.wwcs-oos-ribbon',
+				'oos_ribbon',
+				array(
+					'bg_color'      => '#6c757d',
+					'text_color'    => '#ffffff',
+					'border_radius' => 4,
+					'font_size'     => 11,
+				)
+			)
+		);
 	}
 
 	public static function render_ribbon() {

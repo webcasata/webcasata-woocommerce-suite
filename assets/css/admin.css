@@ -3,6 +3,10 @@
 	max-width: 780px;
 }
 
+.wwcs-feature-group {
+	margin-bottom: 12px;
+}
+
 .wwcs-feature-row {
 	display: flex;
 	align-items: flex-start;
@@ -10,8 +14,12 @@
 	padding: 16px;
 	border: 1px solid #e2e2e2;
 	border-radius: 6px;
-	margin-bottom: 12px;
 	background: #fff;
+}
+
+.wwcs-feature-group:has(.wwcs-feature-fields) .wwcs-feature-row {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
 }
 
 .wwcs-feature-row.wwcs-coming-soon {
@@ -111,26 +119,59 @@
 	font-size: 12px;
 }
 
+/* Accordion panel: sits directly under its feature row, inside the same
+   group, and is only visually separated by a top border — reads as one
+   connected card, not two stacked boxes. */
 .wwcs-feature-fields {
-	margin-top: 10px;
-	padding-top: 10px;
-	border-top: 1px dashed #e2e2e2;
-	transition: opacity 0.2s;
+	overflow: hidden;
+	padding: 16px;
+	background: #fbfaf9;
+	border: 1px solid #e2e2e2;
+	border-top: 1px dashed #ddd;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 
-.wwcs-feature-fields.wwcs-fields-disabled {
-	opacity: 0.45;
+.wwcs-field-grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 150px, 1fr ) );
+	gap: 14px 20px;
 }
 
 .wwcs-field-label {
 	display: flex;
-	align-items: center;
-	gap: 8px;
-	font-size: 13px;
+	flex-direction: column;
+	gap: 6px;
+	font-size: 12px;
+	font-weight: 600;
 	color: #333;
 }
 
+.wwcs-field-input-row {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-weight: 400;
+}
+
 .wwcs-field-input {
-	width: 80px;
-	padding: 4px 6px;
+	padding: 6px 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.wwcs-field-input[type="number"] {
+	width: 70px;
+}
+
+.wwcs-field-input[type="color"] {
+	width: 44px;
+	height: 32px;
+	padding: 2px;
+	cursor: pointer;
+}
+
+.wwcs-field-suffix {
+	color: #888;
+	font-size: 12px;
 }

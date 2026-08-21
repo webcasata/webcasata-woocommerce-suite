@@ -17,6 +17,20 @@ class WWCS_Module_New_Badge {
 			return;
 		}
 		wp_enqueue_style( 'wwcs-new-badge', WWCS_URL . 'assets/css/new-badge.css', array(), WWCS_VERSION );
+
+		wp_add_inline_style(
+			'wwcs-new-badge',
+			WWCS_Settings::build_badge_css(
+				'.wwcs-new-badge',
+				'new_badge',
+				array(
+					'bg_color'      => '#2a9d8f',
+					'text_color'    => '#ffffff',
+					'border_radius' => 4,
+					'font_size'     => 11,
+				)
+			)
+		);
 	}
 
 	public static function render_badge() {

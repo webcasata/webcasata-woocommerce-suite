@@ -91,45 +91,54 @@ class WWCS_Admin_Page {
 						$enabled     = WWCS_Settings::is_enabled( $key );
 						$coming_soon = ! empty( $feature['coming_soon'] );
 						?>
-						<div class="wwcs-feature-row <?php echo $coming_soon ? 'wwcs-coming-soon' : ''; ?>">
-							<label class="wwcs-switch">
-								<input
-									type="checkbox"
-									name="wwcs[<?php echo esc_attr( $key ); ?>]"
-									value="1"
-									<?php checked( $enabled ); ?>
-									<?php disabled( $coming_soon ); ?>
-								/>
-								<span class="wwcs-slider"></span>
-							</label>
-							<div class="wwcs-feature-text">
-								<strong><?php echo esc_html( $feature['label'] ); ?></strong>
-								<?php if ( $coming_soon ) : ?>
-									<span class="wwcs-badge-soon"><?php esc_html_e( 'Coming soon', 'webcasata-woocommerce-suite' ); ?></span>
-								<?php endif; ?>
-								<p><?php echo esc_html( $feature['description'] ); ?></p>
+						<div class="wwcs-feature-group">
+							<div class="wwcs-feature-row <?php echo $coming_soon ? 'wwcs-coming-soon' : ''; ?>">
+								<label class="wwcs-switch">
+									<input
+										type="checkbox"
+										name="wwcs[<?php echo esc_attr( $key ); ?>]"
+										value="1"
+										<?php checked( $enabled ); ?>
+										<?php disabled( $coming_soon ); ?>
+									/>
+									<span class="wwcs-slider"></span>
+								</label>
+								<div class="wwcs-feature-text">
+									<strong><?php echo esc_html( $feature['label'] ); ?></strong>
+									<?php if ( $coming_soon ) : ?>
+										<span class="wwcs-badge-soon"><?php esc_html_e( 'Coming soon', 'webcasata-woocommerce-suite' ); ?></span>
+									<?php endif; ?>
+									<p><?php echo esc_html( $feature['description'] ); ?></p>
+								</div>
+							</div>
 
-								<?php if ( ! empty( $feature['fields'] ) ) : ?>
-									<div class="wwcs-feature-fields<?php echo $enabled ? '' : ' wwcs-fields-disabled'; ?>">
+							<?php if ( ! empty( $feature['fields'] ) ) : ?>
+								<div class="wwcs-feature-fields" style="display: <?php echo $enabled ? 'block' : 'none'; ?>;">
+									<div class="wwcs-field-grid">
 										<?php foreach ( $feature['fields'] as $field_key => $field ) :
 											$field_value = WWCS_Settings::get_field_value( $field_key, isset( $field['default'] ) ? $field['default'] : '' );
-											$input_type  = 'number' === $field['type'] ? 'number' : 'text';
+											$type        = isset( $field['type'] ) ? $field['type'] : 'text';
+											$input_type  = 'color' === $type ? 'color' : ( 'number' === $type ? 'number' : 'text' );
 											?>
 											<label class="wwcs-field-label">
 												<?php echo esc_html( $field['label'] ); ?>
-												<input
-													type="<?php echo esc_attr( $input_type ); ?>"
-													name="wwcs[<?php echo esc_attr( $field_key ); ?>]"
-													value="<?php echo esc_attr( $field_value ); ?>"
-													class="wwcs-field-input"
-													<?php echo 'number' === $field['type'] ? 'min="0" step="1"' : ''; ?>
-													<?php disabled( ! $enabled ); ?>
-												/>
+												<span class="wwcs-field-input-row">
+													<input
+														type="<?php echo esc_attr( $input_type ); ?>"
+														name="wwcs[<?php echo esc_attr( $field_key ); ?>]"
+														value="<?php echo esc_attr( $field_value ); ?>"
+														class="wwcs-field-input"
+														<?php echo 'number' === $type ? 'min="0" step="1"' : ''; ?>
+													/>
+													<?php if ( ! empty( $field['suffix'] ) ) : ?>
+														<span class="wwcs-field-suffix"><?php echo esc_html( $field['suffix'] ); ?></span>
+													<?php endif; ?>
+												</span>
 											</label>
 										<?php endforeach; ?>
 									</div>
-								<?php endif; ?>
-							</div>
+								</div>
+							<?php endif; ?>
 						</div>
 					<?php endforeach; ?>
 				</div>

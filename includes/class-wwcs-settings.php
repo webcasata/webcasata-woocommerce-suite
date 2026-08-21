@@ -41,8 +41,7 @@ class WWCS_Settings {
 					),
 					'quick_view' => array(
 						'label'       => __( 'Quick View', 'webcasata-woocommerce-suite' ),
-						'description' => __( 'Preview a product in a modal without leaving the shop page.', 'webcasata-woocommerce-suite' ),
-						'coming_soon' => true,
+						'description' => __( 'Preview a product — image, price, description, and Add to Cart — in a modal without leaving the shop page. Products with variations link through to the full product page instead of adding to cart inline.', 'webcasata-woocommerce-suite' ),
 					),
 				),
 			),
@@ -53,6 +52,12 @@ class WWCS_Settings {
 					'discount_badge' => array(
 						'label'       => __( 'Percentage Discount Badge', 'webcasata-woocommerce-suite' ),
 						'description' => __( 'Shows a "-X%" badge on product cards for products currently on sale.', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'discount_badge_bg_color'      => array( 'type' => 'color', 'label' => __( 'Background color', 'webcasata-woocommerce-suite' ), 'default' => '#e63946' ),
+							'discount_badge_text_color'    => array( 'type' => 'color', 'label' => __( 'Text color', 'webcasata-woocommerce-suite' ), 'default' => '#ffffff' ),
+							'discount_badge_border_radius' => array( 'type' => 'number', 'label' => __( 'Border radius', 'webcasata-woocommerce-suite' ), 'default' => 4, 'suffix' => 'px' ),
+							'discount_badge_font_size'     => array( 'type' => 'number', 'label' => __( 'Font size', 'webcasata-woocommerce-suite' ), 'default' => 12, 'suffix' => 'px' ),
+						),
 					),
 					'color_swatch_card' => array(
 						'label'       => __( 'Color Attribute on Product Card', 'webcasata-woocommerce-suite' ),
@@ -66,16 +71,22 @@ class WWCS_Settings {
 						'label'       => __( 'Auto "New" Badge', 'webcasata-woocommerce-suite' ),
 						'description' => __( 'Shows a NEW badge on products published within a set number of days — no manual tagging needed.', 'webcasata-woocommerce-suite' ),
 						'fields'      => array(
-							'new_badge_days' => array(
-								'type'    => 'number',
-								'label'   => __( 'Show for products newer than (days)', 'webcasata-woocommerce-suite' ),
-								'default' => 30,
-							),
+							'new_badge_days'          => array( 'type' => 'number', 'label' => __( 'Show for products newer than', 'webcasata-woocommerce-suite' ), 'default' => 30, 'suffix' => 'days' ),
+							'new_badge_bg_color'      => array( 'type' => 'color', 'label' => __( 'Background color', 'webcasata-woocommerce-suite' ), 'default' => '#2a9d8f' ),
+							'new_badge_text_color'    => array( 'type' => 'color', 'label' => __( 'Text color', 'webcasata-woocommerce-suite' ), 'default' => '#ffffff' ),
+							'new_badge_border_radius' => array( 'type' => 'number', 'label' => __( 'Border radius', 'webcasata-woocommerce-suite' ), 'default' => 4, 'suffix' => 'px' ),
+							'new_badge_font_size'     => array( 'type' => 'number', 'label' => __( 'Font size', 'webcasata-woocommerce-suite' ), 'default' => 11, 'suffix' => 'px' ),
 						),
 					),
 					'you_save_label' => array(
 						'label'       => __( '"You Save" Label', 'webcasata-woocommerce-suite' ),
 						'description' => __( 'Shows the exact amount saved (e.g. "You save $10") on sale product cards, alongside the discount badge.', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'you_save_bg_color'      => array( 'type' => 'color', 'label' => __( 'Background color', 'webcasata-woocommerce-suite' ), 'default' => '#e8f6f3' ),
+							'you_save_text_color'    => array( 'type' => 'color', 'label' => __( 'Text color', 'webcasata-woocommerce-suite' ), 'default' => '#2a9d8f' ),
+							'you_save_border_radius' => array( 'type' => 'number', 'label' => __( 'Border radius', 'webcasata-woocommerce-suite' ), 'default' => 4, 'suffix' => 'px' ),
+							'you_save_font_size'     => array( 'type' => 'number', 'label' => __( 'Font size', 'webcasata-woocommerce-suite' ), 'default' => 12, 'suffix' => 'px' ),
+						),
 					),
 					'rating_review_count' => array(
 						'label'       => __( 'Star Rating + Review Count', 'webcasata-woocommerce-suite' ),
@@ -84,6 +95,12 @@ class WWCS_Settings {
 					'oos_ribbon' => array(
 						'label'       => __( 'Out of Stock Ribbon', 'webcasata-woocommerce-suite' ),
 						'description' => __( 'Shows a clear "Out of Stock" ribbon and dims the image for out-of-stock products.', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'oos_ribbon_bg_color'      => array( 'type' => 'color', 'label' => __( 'Background color', 'webcasata-woocommerce-suite' ), 'default' => '#6c757d' ),
+							'oos_ribbon_text_color'    => array( 'type' => 'color', 'label' => __( 'Text color', 'webcasata-woocommerce-suite' ), 'default' => '#ffffff' ),
+							'oos_ribbon_border_radius' => array( 'type' => 'number', 'label' => __( 'Border radius', 'webcasata-woocommerce-suite' ), 'default' => 4, 'suffix' => 'px' ),
+							'oos_ribbon_font_size'     => array( 'type' => 'number', 'label' => __( 'Font size', 'webcasata-woocommerce-suite' ), 'default' => 11, 'suffix' => 'px' ),
+						),
 					),
 					'emi_price_hint' => array(
 						'label'       => __( 'Installment / EMI Price Hint', 'webcasata-woocommerce-suite' ),
@@ -197,7 +214,16 @@ class WWCS_Settings {
 
 	private static function sanitize_field_value( $raw, $field ) {
 		$type = isset( $field['type'] ) ? $field['type'] : 'text';
-		return 'number' === $type ? absint( $raw ) : sanitize_text_field( $raw );
+
+		switch ( $type ) {
+			case 'number':
+				return absint( $raw );
+			case 'color':
+				$color = sanitize_hex_color( $raw );
+				return $color ? $color : ( isset( $field['default'] ) ? $field['default'] : '#000000' );
+			default:
+				return sanitize_text_field( $raw );
+		}
 	}
 
 	/**
@@ -207,6 +233,43 @@ class WWCS_Settings {
 	public static function get_field_value( $key, $default = '' ) {
 		$saved = self::get_all();
 		return isset( $saved[ $key ] ) && '' !== $saved[ $key ] ? $saved[ $key ] : $default;
+	}
+
+	/**
+	 * Builds a single CSS rule (background, text color, border-radius, font
+	 * size) for a "badge-style" module from its saved {$prefix}_* fields,
+	 * for use with wp_add_inline_style(). Used by Discount Badge, New
+	 * Badge, You Save Label, and OOS Ribbon so the same four appearance
+	 * fields behave identically everywhere they appear.
+	 *
+	 * @param string $selector CSS selector to style, e.g. '.wwcs-discount-badge'.
+	 * @param string $prefix   Field key prefix, e.g. 'discount_badge' (reads discount_badge_bg_color etc).
+	 * @param array  $defaults Fallback values: bg_color, text_color, border_radius, font_size.
+	 */
+	public static function build_badge_css( $selector, $prefix, $defaults = array() ) {
+		$defaults = wp_parse_args(
+			$defaults,
+			array(
+				'bg_color'      => '#000000',
+				'text_color'    => '#ffffff',
+				'border_radius' => 4,
+				'font_size'     => 12,
+			)
+		);
+
+		$bg     = sanitize_hex_color( self::get_field_value( $prefix . '_bg_color', $defaults['bg_color'] ) );
+		$color  = sanitize_hex_color( self::get_field_value( $prefix . '_text_color', $defaults['text_color'] ) );
+		$radius = (int) self::get_field_value( $prefix . '_border_radius', $defaults['border_radius'] );
+		$size   = (int) self::get_field_value( $prefix . '_font_size', $defaults['font_size'] );
+
+		return sprintf(
+			'%s { background-color: %s; color: %s; border-radius: %dpx; font-size: %dpx; }',
+			$selector,
+			$bg ? $bg : $defaults['bg_color'],
+			$color ? $color : $defaults['text_color'],
+			$radius,
+			$size
+		);
 	}
 
 	/**

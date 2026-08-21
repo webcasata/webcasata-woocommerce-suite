@@ -16,6 +16,20 @@ class WWCS_Module_You_Save {
 			return;
 		}
 		wp_enqueue_style( 'wwcs-you-save', WWCS_URL . 'assets/css/you-save.css', array(), WWCS_VERSION );
+
+		wp_add_inline_style(
+			'wwcs-you-save',
+			WWCS_Settings::build_badge_css(
+				'.wwcs-you-save',
+				'you_save',
+				array(
+					'bg_color'      => '#e8f6f3',
+					'text_color'    => '#2a9d8f',
+					'border_radius' => 4,
+					'font_size'     => 12,
+				)
+			)
+		);
 	}
 
 	public static function render_savings() {

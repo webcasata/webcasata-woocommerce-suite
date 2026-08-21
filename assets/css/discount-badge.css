@@ -6,12 +6,10 @@ ul.products li.product {
 	position: absolute;
 	top: 10px;
 	left: 10px;
-	background: #e63946;
-	color: #fff;
-	font-size: 12px;
-	font-weight: 600;
 	line-height: 1;
 	padding: 4px 8px;
-	border-radius: 4px;
 	z-index: 2;
+	/* background-color, color, border-radius, and font-size are set via
+	   wp_add_inline_style() from the admin's saved appearance fields —
+	   see WWCS_Module_Discount_Badge::enqueue(). */
 }

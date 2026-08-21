@@ -24,6 +24,10 @@ class WWCS_Loader {
 			'file'  => 'modules/class-module-plus-minus.php',
 			'class' => 'WWCS_Module_Plus_Minus',
 		),
+		'quick_view' => array(
+			'file'  => 'modules/class-module-quick-view.php',
+			'class' => 'WWCS_Module_Quick_View',
+		),
 		'discount_badge' => array(
 			'file'  => 'modules/class-module-discount-badge.php',
 			'class' => 'WWCS_Module_Discount_Badge',
