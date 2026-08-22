@@ -1,22 +1,24 @@
 ( function ( $ ) {
 	'use strict';
 
-	// Accordion behavior: each feature's config/appearance panel (if it has
-	// one) lives in the same .wwcs-feature-group as its toggle. The panel's
-	// initial open/closed state is rendered server-side (see
-	// class-wwcs-admin-page.php) to avoid a flash of the wrong state before
-	// JS runs; from here on, JS just animates the transition when the
-	// toggle changes.
-	$( document ).on( 'change', '.wwcs-feature-row .wwcs-switch input[type="checkbox"]', function () {
-		var $panel = $( this ).closest( '.wwcs-feature-group' ).find( '.wwcs-feature-fields' );
+	// The settings/appearance panel (if a feature has one) is collapsed by
+	// default regardless of the feature's own on/off state — the on/off
+	// toggle and "view its settings" are two independent actions, so a
+	// feature can be on with its panel closed, or off with its panel open
+	// to configure it before switching it on.
+	$( document ).on( 'click', '.wwcs-feature-expand', function () {
+		var $btn     = $( this );
+		var $group   = $btn.closest( '.wwcs-feature-group' );
+		var $panel   = $group.find( '.wwcs-feature-fields' );
+		var expanded = 'true' === $btn.attr( 'aria-expanded' );
+
 		if ( ! $panel.length ) {
 			return;
 		}
 
-		if ( $( this ).is( ':checked' ) ) {
-			$panel.slideDown( 200 );
-		} else {
-			$panel.slideUp( 200 );
-		}
+		$btn.attr( 'aria-expanded', expanded ? 'false' : 'true' );
+		$btn.toggleClass( 'wwcs-feature-expand-open', ! expanded );
+		$group.toggleClass( 'wwcs-feature-group-open', ! expanded );
+		$panel.slideToggle( 200 );
 	} );
 } )( jQuery );

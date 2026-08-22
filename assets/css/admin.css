@@ -17,13 +17,18 @@
 	background: #fff;
 }
 
-.wwcs-feature-group:has(.wwcs-feature-fields) .wwcs-feature-row {
+.wwcs-feature-group.wwcs-feature-group-open .wwcs-feature-row {
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 }
 
 .wwcs-feature-row.wwcs-coming-soon {
 	opacity: 0.6;
+}
+
+.wwcs-feature-text {
+	flex: 1;
+	min-width: 0;
 }
 
 .wwcs-feature-text strong {
@@ -45,6 +50,36 @@
 	margin: 4px 0 0;
 	color: #666;
 	font-size: 13px;
+}
+
+.wwcs-feature-expand {
+	flex-shrink: 0;
+	width: 28px;
+	height: 28px;
+	margin-top: 2px;
+	border: 1px solid #e2e2e2;
+	border-radius: 4px;
+	background: #fafafa;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+.wwcs-feature-expand:hover {
+	background: #f0f0f1;
+}
+
+.wwcs-feature-expand-icon {
+	width: 16px;
+	height: 16px;
+	fill: #666;
+	transition: transform 0.2s ease;
+}
+
+.wwcs-feature-expand.wwcs-feature-expand-open .wwcs-feature-expand-icon {
+	transform: rotate(180deg);
 }
 
 .wwcs-switch {
@@ -119,9 +154,10 @@
 	font-size: 12px;
 }
 
-/* Accordion panel: sits directly under its feature row, inside the same
-   group, and is only visually separated by a top border — reads as one
-   connected card, not two stacked boxes. */
+/* Settings panel: collapsed by default regardless of the feature's on/off
+   state, opened via the chevron button. Sits directly under its feature
+   row, inside the same group, separated only by a dashed top border so it
+   reads as one connected card rather than two stacked boxes. */
 .wwcs-feature-fields {
 	overflow: hidden;
 	padding: 16px;
@@ -174,4 +210,15 @@
 .wwcs-field-suffix {
 	color: #888;
 	font-size: 12px;
+}
+
+.wwcs-field-checkbox-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-weight: 400;
+}
+
+.wwcs-field-checkbox-row input[type="checkbox"] {
+	margin: 0;
 }

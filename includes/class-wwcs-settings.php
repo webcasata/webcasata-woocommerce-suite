@@ -121,8 +121,33 @@ class WWCS_Settings {
 				'features' => array(
 					'floating_cart' => array(
 						'label'       => __( 'Floating / Mini Cart', 'webcasata-woocommerce-suite' ),
-						'description' => __( 'A floating cart icon with item count and a slide-out mini-cart.', 'webcasata-woocommerce-suite' ),
-						'coming_soon' => true,
+						'description' => __( 'A floating cart icon with item count and a slide-out mini-cart, kept in sync with every Add to Cart on the site (loop buttons, Sticky Cart, Quick View).', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'floating_cart_position' => array(
+								'type'    => 'select',
+								'label'   => __( 'Position', 'webcasata-woocommerce-suite' ),
+								'options' => array(
+									'right' => __( 'Bottom right', 'webcasata-woocommerce-suite' ),
+									'left'  => __( 'Bottom left', 'webcasata-woocommerce-suite' ),
+								),
+								'default' => 'right',
+							),
+							'floating_cart_auto_open' => array(
+								'type'    => 'checkbox',
+								'label'   => __( 'Open automatically after adding to cart', 'webcasata-woocommerce-suite' ),
+								'default' => 0,
+							),
+							'floating_cart_bg_color' => array(
+								'type'    => 'color',
+								'label'   => __( 'Button background color', 'webcasata-woocommerce-suite' ),
+								'default' => '#7f54b3',
+							),
+							'floating_cart_badge_color' => array(
+								'type'    => 'color',
+								'label'   => __( 'Item count badge color', 'webcasata-woocommerce-suite' ),
+								'default' => '#e63946',
+							),
+						),
 					),
 				),
 			),
@@ -132,8 +157,7 @@ class WWCS_Settings {
 				'features' => array(
 					'login_popup' => array(
 						'label'       => __( 'Login / Register Popup', 'webcasata-woocommerce-suite' ),
-						'description' => __( 'Opens login/registration in a modal instead of a separate page.', 'webcasata-woocommerce-suite' ),
-						'coming_soon' => true,
+						'description' => __( 'Opens WooCommerce\'s standard login and registration forms in a tabbed modal instead of a separate page, triggered from the existing My Account link.', 'webcasata-woocommerce-suite' ),
 					),
 				),
 			),
@@ -199,6 +223,15 @@ class WWCS_Settings {
 			}
 
 			foreach ( $feature['fields'] as $field_key => $field ) {
+				$field_type = isset( $field['type'] ) ? $field['type'] : 'text';
+
+				if ( 'checkbox' === $field_type ) {
+					// Like the feature toggle itself, an absent checkbox
+					// means "unchecked" — not "wasn't submitted".
+					$clean[ $field_key ] = isset( $posted[ $field_key ] ) ? 1 : 0;
+					continue;
+				}
+
 				if ( isset( $posted[ $field_key ] ) && '' !== $posted[ $field_key ] ) {
 					$clean[ $field_key ] = self::sanitize_field_value( $posted[ $field_key ], $field );
 				} elseif ( ! isset( $clean[ $field_key ] ) ) {
@@ -221,6 +254,10 @@ class WWCS_Settings {
 			case 'color':
 				$color = sanitize_hex_color( $raw );
 				return $color ? $color : ( isset( $field['default'] ) ? $field['default'] : '#000000' );
+			case 'select':
+				$allowed = isset( $field['options'] ) ? array_keys( $field['options'] ) : array();
+				$value   = sanitize_text_field( $raw );
+				return in_array( $value, $allowed, true ) ? $value : ( isset( $field['default'] ) ? $field['default'] : '' );
 			default:
 				return sanitize_text_field( $raw );
 		}

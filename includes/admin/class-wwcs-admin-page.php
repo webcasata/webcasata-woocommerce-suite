@@ -110,31 +110,18 @@ class WWCS_Admin_Page {
 									<?php endif; ?>
 									<p><?php echo esc_html( $feature['description'] ); ?></p>
 								</div>
+								<?php if ( ! empty( $feature['fields'] ) ) : ?>
+									<button type="button" class="wwcs-feature-expand" aria-expanded="false" aria-label="<?php esc_attr_e( 'Toggle settings', 'webcasata-woocommerce-suite' ); ?>">
+										<svg class="wwcs-feature-expand-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z"/></svg>
+									</button>
+								<?php endif; ?>
 							</div>
 
 							<?php if ( ! empty( $feature['fields'] ) ) : ?>
-								<div class="wwcs-feature-fields" style="display: <?php echo $enabled ? 'block' : 'none'; ?>;">
+								<div class="wwcs-feature-fields" style="display: none;">
 									<div class="wwcs-field-grid">
-										<?php foreach ( $feature['fields'] as $field_key => $field ) :
-											$field_value = WWCS_Settings::get_field_value( $field_key, isset( $field['default'] ) ? $field['default'] : '' );
-											$type        = isset( $field['type'] ) ? $field['type'] : 'text';
-											$input_type  = 'color' === $type ? 'color' : ( 'number' === $type ? 'number' : 'text' );
-											?>
-											<label class="wwcs-field-label">
-												<?php echo esc_html( $field['label'] ); ?>
-												<span class="wwcs-field-input-row">
-													<input
-														type="<?php echo esc_attr( $input_type ); ?>"
-														name="wwcs[<?php echo esc_attr( $field_key ); ?>]"
-														value="<?php echo esc_attr( $field_value ); ?>"
-														class="wwcs-field-input"
-														<?php echo 'number' === $type ? 'min="0" step="1"' : ''; ?>
-													/>
-													<?php if ( ! empty( $field['suffix'] ) ) : ?>
-														<span class="wwcs-field-suffix"><?php echo esc_html( $field['suffix'] ); ?></span>
-													<?php endif; ?>
-												</span>
-											</label>
+										<?php foreach ( $feature['fields'] as $field_key => $field ) : ?>
+											<?php self::render_field( $field_key, $field ); ?>
 										<?php endforeach; ?>
 									</div>
 								</div>
@@ -165,6 +152,56 @@ class WWCS_Admin_Page {
 				</p>
 			</form>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Renders one config field inside a feature's accordion panel. Supports
+	 * text, number, color, select, and checkbox — add a case here (and to
+	 * WWCS_Settings::sanitize_field_value()) to support a new type.
+	 */
+	private static function render_field( $field_key, $field ) {
+		$type        = isset( $field['type'] ) ? $field['type'] : 'text';
+		$field_value = WWCS_Settings::get_field_value( $field_key, isset( $field['default'] ) ? $field['default'] : '' );
+		?>
+		<label class="wwcs-field-label">
+			<?php if ( 'checkbox' !== $type ) : ?>
+				<?php echo esc_html( $field['label'] ); ?>
+			<?php endif; ?>
+
+			<?php if ( 'checkbox' === $type ) : ?>
+				<span class="wwcs-field-checkbox-row">
+					<input
+						type="checkbox"
+						name="wwcs[<?php echo esc_attr( $field_key ); ?>]"
+						value="1"
+						<?php checked( $field_value, 1 ); ?>
+					/>
+					<?php echo esc_html( $field['label'] ); ?>
+				</span>
+			<?php elseif ( 'select' === $type ) : ?>
+				<select name="wwcs[<?php echo esc_attr( $field_key ); ?>]" class="wwcs-field-input">
+					<?php foreach ( (array) $field['options'] as $opt_value => $opt_label ) : ?>
+						<option value="<?php echo esc_attr( $opt_value ); ?>" <?php selected( $field_value, $opt_value ); ?>>
+							<?php echo esc_html( $opt_label ); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+			<?php else : ?>
+				<span class="wwcs-field-input-row">
+					<input
+						type="<?php echo esc_attr( 'color' === $type ? 'color' : ( 'number' === $type ? 'number' : 'text' ) ); ?>"
+						name="wwcs[<?php echo esc_attr( $field_key ); ?>]"
+						value="<?php echo esc_attr( $field_value ); ?>"
+						class="wwcs-field-input"
+						<?php echo 'number' === $type ? 'min="0" step="1"' : ''; ?>
+					/>
+					<?php if ( ! empty( $field['suffix'] ) ) : ?>
+						<span class="wwcs-field-suffix"><?php echo esc_html( $field['suffix'] ); ?></span>
+					<?php endif; ?>
+				</span>
+			<?php endif; ?>
+		</label>
 		<?php
 	}
 }

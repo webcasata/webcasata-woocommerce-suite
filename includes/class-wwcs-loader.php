@@ -60,6 +60,14 @@ class WWCS_Loader {
 			'file'  => 'modules/class-module-emi-hint.php',
 			'class' => 'WWCS_Module_EMI_Hint',
 		),
+		'floating_cart' => array(
+			'file'  => 'modules/class-module-floating-cart.php',
+			'class' => 'WWCS_Module_Floating_Cart',
+		),
+		'login_popup' => array(
+			'file'  => 'modules/class-module-login-popup.php',
+			'class' => 'WWCS_Module_Login_Popup',
+		),
 	);
 
 	public static function init() {

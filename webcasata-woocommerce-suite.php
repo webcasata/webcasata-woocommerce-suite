@@ -3,7 +3,7 @@
  * Plugin Name:       Webcasata WooCommerce Suite
  * Plugin URI:        https://webcasata.com
  * Description:       A lightweight, modular WooCommerce enhancement toolkit. Turn on only the features you need — everything else stays completely inactive, so you're not paying a performance cost for features you don't use.
- * Version:           1.4.0
+ * Version:           1.7.1
  * Author:            Webcasata
  * Author URI:        https://webcasata.com
  * Text Domain:       webcasata-woocommerce-suite
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'WWCS_VERSION', '1.4.0' );
+define( 'WWCS_VERSION', '1.7.1' );
 define( 'WWCS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WWCS_URL', plugin_dir_url( __FILE__ ) );
 define( 'WWCS_BASENAME', plugin_basename( __FILE__ ) );

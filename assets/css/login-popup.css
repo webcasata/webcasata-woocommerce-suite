@@ -1,0 +1,174 @@
+.wwcs-lp-overlay {
+	display: none;
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 100000;
+}
+
+.wwcs-login-popup.wwcs-lp-open .wwcs-lp-overlay {
+	display: block;
+}
+
+body.wwcs-lp-lock-scroll {
+	overflow: hidden;
+}
+
+.wwcs-lp-modal {
+	display: none;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 460px;
+	max-height: 90vh;
+	overflow-y: auto;
+	background: #fff;
+	border-radius: 8px;
+	padding: 32px;
+	z-index: 100001;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.wwcs-login-popup.wwcs-lp-open .wwcs-lp-modal {
+	display: block;
+}
+
+.wwcs-lp-close {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 32px;
+	height: 32px;
+	border: none;
+	background: #f2f2f2;
+	border-radius: 50%;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+	color: #555;
+}
+
+.wwcs-lp-close:hover {
+	background: #e2e2e2;
+}
+
+.wwcs-lp-tabs {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid #eee;
+}
+
+.wwcs-lp-tab {
+	flex: 1;
+	padding: 10px 0;
+	border: none;
+	background: none;
+	cursor: pointer;
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: #999;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+}
+
+.wwcs-lp-tab.wwcs-lp-tab-active {
+	color: #222;
+	border-bottom-color: #7f54b3;
+}
+
+.wwcs-lp-notices {
+	margin-bottom: 12px;
+}
+
+/* Neutralize WooCommerce's default two-column layout for these forms —
+   only inside the popup, so the real My Account page keeps its normal
+   side-by-side columns untouched. We show one pane at a time instead. */
+.wwcs-lp-forms .u-columns,
+.wwcs-lp-forms .col2-set {
+	display: block !important;
+}
+
+.wwcs-lp-forms .u-column1,
+.wwcs-lp-forms .u-column2 {
+	width: 100% !important;
+	float: none !important;
+	margin: 0 !important;
+}
+
+.wwcs-lp-pane {
+	display: none;
+}
+
+.wwcs-lp-pane.wwcs-lp-pane-active {
+	display: block;
+}
+
+/* "Login" / "Register" headings are redundant with the tab labels above. */
+.wwcs-lp-pane h2 {
+	display: none;
+}
+
+.wwcs-lp-pane form .form-row {
+	margin-bottom: 14px;
+}
+
+.wwcs-lp-pane form label {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #333;
+}
+
+.wwcs-lp-pane form input.input-text {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.wwcs-lp-pane form .woocommerce-form-login__rememberme {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-weight: 400;
+	font-size: 13px;
+}
+
+.wwcs-lp-pane form button[type="submit"] {
+	display: block;
+	width: 100%;
+	padding: 12px;
+	margin-top: 10px;
+	background: #7f54b3;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-weight: 700;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	cursor: pointer;
+}
+
+.wwcs-lp-pane form button[type="submit"]:hover {
+	background: #6f4699;
+}
+
+.wwcs-lp-pane .woocommerce-LostPassword {
+	margin-top: 10px;
+	font-size: 12px;
+	text-align: center;
+}
+
+@media (max-width: 480px) {
+	.wwcs-lp-modal {
+		padding: 20px;
+	}
+}
