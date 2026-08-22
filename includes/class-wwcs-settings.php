@@ -161,6 +161,29 @@ class WWCS_Settings {
 					),
 				),
 			),
+
+			'wishlist' => array(
+				'label'    => __( 'Wishlist', 'webcasata-woocommerce-suite' ),
+				'features' => array(
+					'wishlist' => array(
+						'label'       => __( 'Wishlist', 'webcasata-woocommerce-suite' ),
+						'description' => __( 'A heart icon on product cards and the single product page lets shoppers save items for later. Create a page, add the [wwcs_wishlist] shortcode to it, then select that page below. Guests are tracked via cookie and merged into their account automatically if they log in.', 'webcasata-woocommerce-suite' ),
+						'fields'      => array(
+							'wishlist_page_id' => array(
+								'type'             => 'select',
+								'label'            => __( 'Wishlist page', 'webcasata-woocommerce-suite' ),
+								'options_callback' => array( 'WWCS_Settings', 'page_options' ),
+								'default'          => '',
+							),
+							'wishlist_active_color' => array(
+								'type'    => 'color',
+								'label'   => __( 'Active heart color', 'webcasata-woocommerce-suite' ),
+								'default' => '#e63946',
+							),
+						),
+					),
+				),
+			),
 		);
 
 		// Let other code (or future Pro add-on) register more modules.
@@ -255,12 +278,45 @@ class WWCS_Settings {
 				$color = sanitize_hex_color( $raw );
 				return $color ? $color : ( isset( $field['default'] ) ? $field['default'] : '#000000' );
 			case 'select':
-				$allowed = isset( $field['options'] ) ? array_keys( $field['options'] ) : array();
+				$allowed = array_keys( self::resolve_field_options( $field ) );
 				$value   = sanitize_text_field( $raw );
 				return in_array( $value, $allowed, true ) ? $value : ( isset( $field['default'] ) ? $field['default'] : '' );
 			default:
 				return sanitize_text_field( $raw );
 		}
+	}
+
+	/**
+	 * A select field's options can be a static array declared right in the
+	 * registry (e.g. Floating Cart's position field), or — when the choices
+	 * depend on site content, like "pick a page" — an 'options_callback'
+	 * resolved here instead. Callbacks must be defined somewhere that's
+	 * always loaded (like this class, see page_options() below), NOT inside
+	 * a module file: the admin screen renders every tab's fields regardless
+	 * of which toggles are on, so a callback living in a conditionally-
+	 * loaded module would fatal whenever that module's toggle is off.
+	 */
+	public static function resolve_field_options( $field ) {
+		if ( ! empty( $field['options_callback'] ) && is_callable( $field['options_callback'] ) ) {
+			$options = call_user_func( $field['options_callback'] );
+			return is_array( $options ) ? $options : array();
+		}
+		return isset( $field['options'] ) ? (array) $field['options'] : array();
+	}
+
+	/**
+	 * Reusable "pick a page" option list, e.g. for Wishlist's page picker.
+	 * Kept here (always loaded) rather than in a module, per the note above.
+	 */
+	public static function page_options() {
+		$options = array( '' => __( '— Select a page —', 'webcasata-woocommerce-suite' ) );
+
+		$pages = get_pages( array( 'sort_column' => 'post_title' ) );
+		foreach ( $pages as $page ) {
+			$options[ (string) $page->ID ] = $page->post_title;
+		}
+
+		return $options;
 	}
 
 	/**

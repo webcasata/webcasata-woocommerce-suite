@@ -181,7 +181,7 @@ class WWCS_Admin_Page {
 				</span>
 			<?php elseif ( 'select' === $type ) : ?>
 				<select name="wwcs[<?php echo esc_attr( $field_key ); ?>]" class="wwcs-field-input">
-					<?php foreach ( (array) $field['options'] as $opt_value => $opt_label ) : ?>
+					<?php foreach ( WWCS_Settings::resolve_field_options( $field ) as $opt_value => $opt_label ) : ?>
 						<option value="<?php echo esc_attr( $opt_value ); ?>" <?php selected( $field_value, $opt_value ); ?>>
 							<?php echo esc_html( $opt_label ); ?>
 						</option>

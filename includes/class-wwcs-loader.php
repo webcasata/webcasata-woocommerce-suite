@@ -68,6 +68,10 @@ class WWCS_Loader {
 			'file'  => 'modules/class-module-login-popup.php',
 			'class' => 'WWCS_Module_Login_Popup',
 		),
+		'wishlist' => array(
+			'file'  => 'modules/class-module-wishlist.php',
+			'class' => 'WWCS_Module_Wishlist',
+		),
 	);
 
 	public static function init() {

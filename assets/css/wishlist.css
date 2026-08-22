@@ -1,0 +1,182 @@
+/* Heart icon on the product card */
+ul.products li.product {
+	position: relative;
+}
+
+.wwcs-wishlist-btn {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	border: none;
+	background: #fff;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 5;
+	padding: 0;
+	transition: opacity 0.15s;
+}
+
+/* If the Out of Stock ribbon is also active, it sits in this same corner —
+   push the heart down below it instead of overlapping. */
+.wwcs-oos-ribbon ~ .wwcs-wishlist-btn {
+	top: 40px;
+}
+
+.wwcs-wishlist-btn.wwcs-wishlist-loading {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.wwcs-wishlist-btn svg {
+	width: 16px;
+	height: 16px;
+	fill: none;
+	stroke: #555;
+	stroke-width: 1.6;
+}
+
+/* Active (filled) color is set via wp_add_inline_style from the admin's
+   saved "Active heart color" field — see WWCS_Module_Wishlist::enqueue(). */
+
+/* Single product page button */
+.wwcs-wishlist-btn-single {
+	position: static;
+	width: auto;
+	height: auto;
+	border-radius: 4px;
+	background: #fff;
+	border: 1px solid #ddd;
+	box-shadow: none;
+	padding: 10px 16px;
+	margin: 10px 0 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #333;
+}
+
+.wwcs-wishlist-btn-single svg {
+	width: 18px;
+	height: 18px;
+}
+
+.wwcs-wishlist-btn-single:hover {
+	border-color: #bbb;
+}
+
+/* Toast notification */
+.wwcs-wishlist-toast {
+	position: fixed;
+	bottom: 24px;
+	left: 50%;
+	transform: translate(-50%, 12px);
+	background: #222;
+	color: #fff;
+	padding: 12px 20px;
+	border-radius: 6px;
+	font-size: 13px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+	opacity: 0;
+	z-index: 100002;
+	transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.wwcs-wishlist-toast.wwcs-wishlist-toast-visible {
+	opacity: 1;
+	transform: translate(-50%, 0);
+}
+
+.wwcs-wishlist-toast a {
+	color: #fff;
+	text-decoration: underline;
+	margin-left: 8px;
+	font-weight: 600;
+}
+
+/* Wishlist page ([wwcs_wishlist] shortcode) */
+.wwcs-wishlist-empty {
+	text-align: center;
+	padding: 40px 0;
+}
+
+.wwcs-wishlist-empty p {
+	color: #666;
+	margin-bottom: 16px;
+}
+
+.wwcs-wishlist-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 20px;
+}
+
+.wwcs-wishlist-item {
+	border: 1px solid #eee;
+	border-radius: 6px;
+	padding: 14px;
+}
+
+.wwcs-wishlist-item-image {
+	display: block;
+	margin-bottom: 10px;
+}
+
+.wwcs-wishlist-item-image img {
+	width: 100%;
+	height: 160px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.wwcs-wishlist-item-name {
+	display: block;
+	font-weight: 600;
+	font-size: 14px;
+	color: #222;
+	text-decoration: none;
+	margin-bottom: 4px;
+}
+
+.wwcs-wishlist-item-name:hover {
+	text-decoration: underline;
+}
+
+.wwcs-wishlist-item-price {
+	font-size: 13px;
+	color: #555;
+	margin-bottom: 12px;
+}
+
+.wwcs-wishlist-item-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.wwcs-wishlist-remove {
+	border: none;
+	background: none;
+	color: #999;
+	font-size: 12px;
+	text-decoration: underline;
+	cursor: pointer;
+	padding: 0;
+}
+
+.wwcs-wishlist-remove:hover {
+	color: #c0392b;
+}
+
+.wwcs-wishlist-remove.wwcs-wishlist-loading {
+	opacity: 0.5;
+	pointer-events: none;
+}

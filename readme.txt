@@ -6,7 +6,7 @@ Tested up to: 6.6
 Requires PHP: 7.4
 Requires Plugins: woocommerce
 WC requires at least: 8.0
-Stable tag: 1.7.1
+Stable tag: 1.8.0
 License: GPLv2 or later
 
 A lightweight, modular WooCommerce enhancement toolkit. Turn on only the features you need — everything else stays completely inactive.
@@ -40,6 +40,9 @@ Webcasata WooCommerce Suite replaces several single-purpose WooCommerce plugins 
 **Login / Register**
 * Login/Register Popup — WooCommerce's own My Account login/registration forms in a tabbed modal. Opens from the theme's existing "My Account" link, or from any element carrying the `wwcs-login-trigger` or `wcloginmodal` class (filterable via `wwcs_login_trigger_classes`) — add `data-tab="register"` to open straight to the Register tab. Submission is a normal (non-AJAX) page reload, since WooCommerce doesn't expose an AJAX endpoint for auth the way it does for cart actions; the modal reopens itself to the right tab if there's an error to show.
 
+**Wishlist**
+* Heart icon on product cards and the single product page, AJAX toggle, no page reload. Logged-in shoppers get it stored as user meta; guests get a cookie, automatically merged into their account if they log in. The wishlist page itself is a `[wwcs_wishlist]` shortcode (the same convention WooCommerce uses for its own Cart/Checkout pages) — create a page, add the shortcode, then pick that page in the settings. A brief toast confirms each add/remove with a link to the wishlist page.
+
 Four Product Card badges — Percentage Discount Badge, Auto "New" Badge, "You Save" Label, and Out of Stock Ribbon — have appearance controls (background color, text color, border-radius, font size) in an accordion panel that opens automatically under the toggle when it's switched on, and closes when it's switched off. Two modules (Auto "New" Badge, Installment/EMI Price Hint) also have a small functional field (day threshold, installment count) in the same panel. The panel's open/closed state is rendered server-side to match the saved toggle (no flash of the wrong state on page load); JS only animates the transition when you flip a toggle.
 
 Modules marked "Coming soon" in the admin screen are wired into the settings UI and toggle-ready, so they can be built out and dropped in without touching the settings or admin UI code.
@@ -56,11 +59,19 @@ Modules marked "Coming soon" in the admin screen are wired into the settings UI 
 2. For a "badge-style" element (background + text color + border-radius + font-size), give it exactly those four fields named `{your_prefix}_bg_color`, `{your_prefix}_text_color`, `{your_prefix}_border_radius`, `{your_prefix}_font_size`, then call `WWCS_Settings::build_badge_css( '.your-css-class', 'your_prefix', $defaults )` from your module's `enqueue()` and pass the result to `wp_add_inline_style()` — see `class-module-discount-badge.php` for the pattern used by all four current badge modules.
 3. Add a `feature_key => [ 'file', 'class' ]` entry to `WWCS_Loader::$module_map` in `includes/class-wwcs-loader.php`.
 4. Create `includes/modules/class-module-your-feature.php` with a class that has a static `init()` method — that's the only method the loader calls, so hook everything from there. Read a config field's saved value with `WWCS_Settings::get_field_value( 'field_key', $default )`.
-5. Enqueue any CSS/JS from inside your module's own `init()`, conditioned on the relevant page (`is_product()`, `is_shop()`, etc.) — never enqueue globally.
+5. Enqueue any CSS/JS from inside your module's own `init()`, conditioned on the relevant page (`is_product()`, `is_shop()`, etc.) — never enqueue globally. If your module needs to enqueue on a shortcode's page too (see Wishlist), check `has_shortcode()` at this same early `wp_enqueue_scripts` timing, not from inside the shortcode's own render callback — shortcodes render during `the_content()`, which runs after `wp_head()` has already printed styles for the request.
+
+A `select` field's options can be a static array in the registry, or an `options_callback` (a callable, e.g. `array( 'WWCS_Settings', 'page_options' )`) resolved at render/save time via `WWCS_Settings::resolve_field_options()`. Callbacks must live somewhere always-loaded — the admin screen renders every tab's fields regardless of which toggles are on, so a callback inside a conditionally-loaded module file would fatal whenever that module's toggle is off.
 
 The module only loads at all if its toggle is on, so there's no need to check the setting again inside the module itself.
 
 == Changelog ==
+
+= 1.8.0 =
+* Added Wishlist: heart icon on product cards and the single product page, AJAX toggle. Logged-in via user meta, guests via cookie, merged automatically on login.
+* Added a `[wwcs_wishlist]` shortcode for the wishlist page itself, following the same shortcode-based-page convention WooCommerce uses for Cart/Checkout.
+* Settings framework gained `options_callback` support for `select` fields, so a dropdown's choices can be computed at render time (e.g. "pick a page") instead of only a hardcoded list.
+* Fixed a real timing bug caught during development: enqueuing a shortcode page's assets from inside the shortcode's own render callback is too late for styles, since shortcodes render during `the_content()` — after `wp_head()` has already printed the page's enqueued styles. The check now happens at the normal `wp_enqueue_scripts` timing instead.
 
 = 1.7.1 =
 * Login/Register Popup can now also be opened by clicking any element carrying the `wwcs-login-trigger` or `wcloginmodal` class — not just the theme's My Account link, which remains supported alongside it. Works on links, buttons, images, or plain text; add `data-tab="register"` to open straight to the Register tab. The recognized class list is filterable via `wwcs_login_trigger_classes`.
